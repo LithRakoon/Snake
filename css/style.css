@@ -6,7 +6,7 @@
 
 .grid-container {
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto 60vw auto;
     background-color: #2196F3;
 }
   
@@ -20,4 +20,53 @@
 
 .bgc {
     background-color: black;
+    color: white;
+    font-size: 1vw;
+}
+
+.speed {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.settings {
+    font-weight: bold;
+    font-size: larger;
+}
+
+.rectangle {
+    display: flex;
+    justify-content: center;
+    align-items: center ;
+    width:200px;
+    height:100px;
+    border:1px solid green;
+    margin-left: 20%;
+}
+
+.colors0 {
+    padding: 10px;
+    background-color: red;
+    border: none;
+}
+
+.colors1 {
+    padding: 10px;
+    background-color: green;
+    border: none;
+    margin-left: 10px;
+}
+
+.colors2 {
+    padding: 10px;
+    background-color: purple;
+    border: none;
+    margin-left: 10px;
+}
+
+.colors3 {
+    padding: 10px;
+    background-color: blue;
+    border: none;
+    margin-left: 10px;
 }
