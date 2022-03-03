@@ -72,11 +72,14 @@
 }
 
 .main {
-    border: 4px solid pink;
+    border: 5px solid pink;
     font-size: small;
     position: relative;
     max-height: inherit;
     overflow-y: auto;
+    width: 60vw; /* or whatever width you want. */
+    max-width:60vw; /* or whatever width you want. */
+    display: inline-block;
 }
 
 .scored {
@@ -85,8 +88,9 @@
 
 .snake {
     background-color: green; 
-    position:absolute; width:100px; 
-    height:100px; 
+    position:absolute; 
+    width:50px; 
+    height:50px; 
     top:0px; 
     left:0px;
 }
