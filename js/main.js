@@ -23,7 +23,7 @@ let snakehead_rect = {
 };
 let gameover = false;
 let directinal = "";
-
+let snakeFood = document.createElement("div")
 
 window.onload = function() {
     getPlayfieldCoords();
@@ -41,6 +41,7 @@ function getPlayfieldCoords()
 function checkBounds()
 {
     let rect = snakeHead.getBoundingClientRect();
+    console.log(rect);
     snakehead_rect.x1 = rect.x;
     snakehead_rect.y1 = rect.y;
     snakehead_rect.x2 = rect.right;
@@ -51,14 +52,16 @@ function checkBounds()
         snakehead_rect.y1 >= playfield_rect.y1 + 5 &&
         snakehead_rect.y2 <= playfield_rect.y2 - 7) {
             return true;
-        }
-    gameOverScreen()
+    }
+
+    gameOverScreen();
     return false ; 
 }
 
 let interValID = setInterval( () => {
     if (startgame === "start") {
         move(snakeHead, directinal)
+        
     }
 
 }, 100)
@@ -66,15 +69,19 @@ let interValID = setInterval( () => {
 epic.addEventListener('keydown', (event) => {
     if (event.key === "w") {
         startgame = "start"
+        gameover = false
         directinal = "up"
     } if (event.key === "a") {
         startgame = "start"
+        gameover = false
         directinal = "left"
     } if (event.key === "s") {
         startgame = "start"
+        gameover = false
         directinal = "top"
     } if (event.key === "d") {
         startgame = "start"
+        gameover = false
         directinal = "right"
     }
 });
@@ -113,10 +120,13 @@ function move(snakeHead, direction, distance=5) {
 
 function gameOverScreen () {
     if (gameover == false){
-        gameover = true
-    alert('Game Over!')
+        gameover = true;
+        directinal = "";
+        startgame = "stop"
+        snakeHead.style.top = "0px";
+        snakeHead.style.left = "0px";
+        alert('Game Over!');
     }
-    window.location.reload(true);
 }
 
 redSnake.addEventListener('click', (event) => {
@@ -135,3 +145,22 @@ blueSnake.addEventListener('click', (event) => {
     snakeHead.style.backgroundColor = 'blue';
 });
 
+function randomTen(min, max) {
+    return Math.round((Math.random() * (max-min) /10 ) * 10);
+    function creatFood() {
+        foodX = randomTen(0, playField.width -10);
+        foodY = randomTen(0, playField.height - 10); snakeHead.forEach(function isFoodOnSnake(part) {
+            const foodIsOnSnake = part.x == foodX && part.y == foodY
+            if (foodIsOnSnake)
+            creatFood();
+        })
+    }
+
+}
+
+function drawFood() {
+    snakeFood.id = 'snek';
+    snakeFood.className = 'snekcless'
+    // document.body.appendChild
+    playField.appendChild(snakeFood);
+} 
