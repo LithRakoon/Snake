@@ -21,12 +21,25 @@ let snakehead_rect = {
     x2: 0,
     y2: 0,
 };
+let snakeFood_rect = {
+    x1: 0,
+    y1: 0,
+    x2: 0,
+    y2: 0,
+}
+
 let gameover = false;
 let directinal = "";
-let snakeFood = document.createElement("div")
+var div = document.createElement("div");
+let teest = document.querySelector("#teest");
+
+
+
+
 
 window.onload = function() {
     getPlayfieldCoords();
+    drawFood()
 };
 
 function getPlayfieldCoords()
@@ -56,6 +69,25 @@ function checkBounds()
 
     gameOverScreen();
     return false ; 
+}
+
+function checkFood()
+{
+    let rect = div.getBoundingClientRect();
+    console.log(rect);
+    snakeFood_rect.x1 = rect.x;
+    snakeFood_rect.y1 = rect.y;
+    snakeFood_rect.x2 = rect.right;
+    snakeFood_rect.y2 = rect.bottom;
+
+    if(snakeFood_rect.x1 >= snakehead_rect.x1 && 
+        snakeFood_rect.x2 <= snakehead_rect.x2 &&
+        snakeFood_rect.y1 >= snakehead_rect.y1 &&
+        snakeFood_rect.y2 <= snakehead_rect.y2) {
+            console.log("amogus")
+            return true;
+    }
+    return false;
 }
 
 let interValID = setInterval( () => {
@@ -145,22 +177,16 @@ blueSnake.addEventListener('click', (event) => {
     snakeHead.style.backgroundColor = 'blue';
 });
 
-function randomTen(min, max) {
-    return Math.round((Math.random() * (max-min) /10 ) * 10);
-    function creatFood() {
-        foodX = randomTen(0, playField.width -10);
-        foodY = randomTen(0, playField.height - 10); snakeHead.forEach(function isFoodOnSnake(part) {
-            const foodIsOnSnake = part.x == foodX && part.y == foodY
-            if (foodIsOnSnake)
-            creatFood();
-        })
-    }
-
+function drawFood() {
+    div.style.position = "absolute"
+    div.style.width = "30px";
+    div.style.height = "30px";
+    div.style.background = "red";
+    div.style.top = (95*Math.random()) + "%";
+    div.style.left = (95*Math.random()) + "%";
+    document.getElementById("snakefood").appendChild(div);
 }
 
-function drawFood() {
-    snakeFood.id = 'snek';
-    snakeFood.className = 'snekcless'
-    // document.body.appendChild
-    playField.appendChild(snakeFood);
-} 
+if (checkFood == true) {
+    console.log('joe biden')
+}
