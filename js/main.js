@@ -32,6 +32,7 @@ let gameover = false;
 let directinal = "";
 var div = document.createElement("div");
 let teest = document.querySelector("#teest");
+let snakeFood = document.querySelector('#snakefood')
 
 
 
@@ -44,21 +45,32 @@ window.onload = function() {
 
 function getPlayfieldCoords()
 {
-    let rect = playField.getBoundingClientRect();
-    playfield_rect.x1 = rect.x;
-    playfield_rect.y1 = rect.y;
-    playfield_rect.x2 = rect.right;
-    playfield_rect.y2 = rect.bottom;
+    getBounds(playfield_rect, playField);
+    // let rect = playField.getBoundingClientRect();
+    // playfield_rect.x1 = rect.x;
+    // playfield_rect.y1 = rect.y;
+    // playfield_rect.x2 = rect.right;
+    // playfield_rect.y2 = rect.bottom;
+}
+
+function getBounds(target, source)
+{
+    let rect = source.getBoundingClientRect();
+    target.x1 = rect.x;
+    target.y1 = rect.y;
+    target.x2 = rect.right;
+    target.y2 = rect.bottom;
+
 }
 
 function checkBounds()
 {
-    let rect = snakeHead.getBoundingClientRect();
-    console.log(rect);
-    snakehead_rect.x1 = rect.x;
-    snakehead_rect.y1 = rect.y;
-    snakehead_rect.x2 = rect.right;
-    snakehead_rect.y2 = rect.bottom;
+    getBounds(snakehead_rect, snakeHead);
+    // let rect = snakeHead.getBoundingClientRect();
+    // snakehead_rect.x1 = Math.floor(rect.x);
+    // snakehead_rect.y1 = Math.floor(rect.y);
+    // snakehead_rect.x2 = Math.floor(rect.right);
+    // snakehead_rect.y2 = rect.bottom;
 
     if(snakehead_rect.x1 >= playfield_rect.x1 + 5 && 
         snakehead_rect.x2 <= playfield_rect.x2 - 7 &&
@@ -70,25 +82,54 @@ function checkBounds()
     gameOverScreen();
     return false ; 
 }
+function yeet() {
+    getBounds(snakeFood_rect, snakeFood);
+    console.log(snakeFood_rect.x1)
+}
 
 function checkFood()
 {
-    let rect = div.getBoundingClientRect();
-    console.log(rect);
-    snakeFood_rect.x1 = rect.x;
-    snakeFood_rect.y1 = rect.y;
-    snakeFood_rect.x2 = rect.right;
-    snakeFood_rect.y2 = rect.bottom;
+    getBounds(snakeFood_rect, snakeFood);
+    let mrect = {
+        x: 0,
+        y: 0
+    };
+    mrect.x = snakeFood_rect.x1 + ((snakeFood_rect.x2 - snakeFood_rect.x1)/2);
+    mrect.y = snakeFood_rect.y1 + ((snakeFood_rect.y2 - snakeFood_rect.y1)/2);
+    
+    console.log('MRECT: ', mrect);
 
-    if(snakeFood_rect.x1 >= snakehead_rect.x1 && 
-        snakeFood_rect.x2 <= snakehead_rect.x2 &&
-        snakeFood_rect.y1 >= snakehead_rect.y1 &&
-        snakeFood_rect.y2 <= snakehead_rect.y2) {
-            console.log("amogus")
-            return true;
-    }
-    return false;
+
+
+
+    // let rect = div.getBoundingClientRect();
+    // snakeFood_rect.x1 = rect.x;
+    // snakeFood_rect.y1 = rect.y;
+    // snakeFood_rect.x2 = rect.right;
+    // snakeFood_rect.y2 = rect.bottom;
+    // if(snakeFood_rect.x1 == snakehead_rect.x1 + 10 && 
+    //     snakeFood_rect.x2 == snakehead_rect.x2 -10 &&
+    //     snakeFood_rect.y1 == snakehead_rect.y1 + 10 &&
+    //     snakeFood_rect.y2 == snakehead_rect.y2 - 10) {
+        //         return true;
+        // }
+
+            // ((snakehead_rect.x2 <= snakeFood_rect.x2 && snakehead_rect.x2 >= snakeFood_rect.x1 && 
+            //  snakehead_rect.y2 <= snakeFood_rect.y2 && snakehead_rect.y2 >= snakeFood_rect.y1) ||
+            // (snakehead_rect.x2 <= snakeFood_rect.x2 && snakehead_rect.x2 >= snakeFood_rect.x1 && 
+            //  snakehead_rect.y1 <= snakeFood_rect.y2 && snakehead_rect.y1 >= snakeFood_rect.y1) ||
+            // (snakehead_rect.x1 <= snakeFood_rect.x2 && snakehead_rect.x1 >= snakeFood_rect.x1 && 
+            //  snakehead_rect.y1 <= snakeFood_rect.y2 && snakehead_rect.y1 >= snakeFood_rect.y1) ||
+            // (snakehead_rect.x1 <= snakeFood_rect.x2 && snakehead_rect.x1 >= snakeFood_rect.x1 && 
+            //  snakehead_rect.y2 <= snakeFood_rect.y2 && snakehead_rect.y2 >= snakeFood_rect.y1)) ||
+            
+            // (snakeFood_rect.x2 == snakehead_rect.x2 || snakeFood_rect.y1 == snakehead_rect.y2 ||
+            //  snakeFood_rect.x2 == snakehead_rect.x1 || snakeFood_rect.y2 == snakehead_rect.y1)
+            
 }
+
+
+
 
 let interValID = setInterval( () => {
     if (startgame === "start") {
@@ -127,6 +168,11 @@ function thiswillchange () {
 function move(snakeHead, direction, distance=5) {
     if(!checkBounds())
         return;
+    
+    if (checkFood() == true) {
+        thiswillchange()
+        drawFood()
+    }
 
     let topOrLeft = (direction=="left" || direction=="right") ? "left" : "top";
     let frameDistance = 1;
@@ -187,6 +233,4 @@ function drawFood() {
     document.getElementById("snakefood").appendChild(div);
 }
 
-if (checkFood == true) {
-    console.log('joe biden')
-}
+
