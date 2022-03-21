@@ -1,3 +1,16 @@
+/*
+ * Met onderstaande berekenen we de maximale afstand tussen het middelpunt van
+ * de snake_head en de food wanneer snake_head op (0,0) zit en food  op (50,50)
+ * Wanneer deze afstand maximaal is raakt de snake de food
+ */
+const _MAX_HEAD_SIZE = 50;               // Snakehead is vierkant, dit is de lengte van de zijden in pixels
+const _MAX_FOOD_SIZE = 30;               // Food is vierkant, dit is de lengte van de zijden in pixels
+const _MAX_DISTANCE = (_MAX_HEAD_SIZE / 2) + (_MAX_FOOD_SIZE / 2);     // Wanneer beide precies aan elkaar zitten
+                                                                    // Berekenen we hier de maximale afstand 
+                                                                    // tussen de middelpunten van beide
+const _MAX_CENTERPOINT_DISTANCE = Math.sqrt(Math.abs(Math.pow(_MAX_DISTANCE, 2) + Math.pow(_MAX_DISTANCE, 2)));
+    
+
 let epic = document.querySelector('body');
 let scoreboard = document.querySelector('#scoreboard');
 let points = 0;
@@ -20,20 +33,25 @@ let snakehead_rect = {
     y1: 0,
     x2: 0,
     y2: 0,
+    mx: 0,
+    my: 0
 };
 let snakeFood_rect = {
     x1: 0,
     y1: 0,
     x2: 0,
     y2: 0,
+    mx: 0,
+    my: 0
 }
+
 
 let gameover = false;
 let directinal = "";
 var div = document.createElement("div");
 let teest = document.querySelector("#teest");
-let snakeFood = document.querySelector('#snakefood')
-
+let snakeFood = document.querySelector('#snakefood div');   // Werkt niet, element food is nog niet gemaakt
+let startpoints = true
 
 
 
@@ -84,48 +102,27 @@ function checkBounds()
 }
 function yeet() {
     getBounds(snakeFood_rect, snakeFood);
-    console.log(snakeFood_rect.x1)
+    // console.log(snakeFood_rect.x1)
 }
 
 function checkFood()
 {
-    getBounds(snakeFood_rect, snakeFood);
-    let mrect = {
-        x: 0,
-        y: 0
-    };
-    mrect.x = snakeFood_rect.x1 + ((snakeFood_rect.x2 - snakeFood_rect.x1)/2);
-    mrect.y = snakeFood_rect.y1 + ((snakeFood_rect.y2 - snakeFood_rect.y1)/2);
-    
-    console.log('MRECT: ', mrect);
+    let sf_distance = 0;
 
+    // a = (snakeFood.my - snakeHead.my)^2
+    // We gebruiken ABS om er voor te zorgen dat er geen negatieve getallen zijn.
+    // Want soms ligt het middelpunt van de snakehead onder het middelpunt van de food
+    // En als we dan food.my - head.my gaan uitrekenen komt er een negatief getal uit.
+    // En negatieve afstanden bestaan niet.
+    let a = Math.pow(Math.abs(snakeFood_rect.my - snakehead_rect.my), 2);
+    let b = Math.pow(Math.abs(snakeFood_rect.mx - snakehead_rect.mx), 2);
+    // We passen hieronder de stelling van Pietje Gras toe (Pythagoras)
+    sf_distance = Math.sqrt(a + b);
 
-
-
-    // let rect = div.getBoundingClientRect();
-    // snakeFood_rect.x1 = rect.x;
-    // snakeFood_rect.y1 = rect.y;
-    // snakeFood_rect.x2 = rect.right;
-    // snakeFood_rect.y2 = rect.bottom;
-    // if(snakeFood_rect.x1 == snakehead_rect.x1 + 10 && 
-    //     snakeFood_rect.x2 == snakehead_rect.x2 -10 &&
-    //     snakeFood_rect.y1 == snakehead_rect.y1 + 10 &&
-    //     snakeFood_rect.y2 == snakehead_rect.y2 - 10) {
-        //         return true;
-        // }
-
-            // ((snakehead_rect.x2 <= snakeFood_rect.x2 && snakehead_rect.x2 >= snakeFood_rect.x1 && 
-            //  snakehead_rect.y2 <= snakeFood_rect.y2 && snakehead_rect.y2 >= snakeFood_rect.y1) ||
-            // (snakehead_rect.x2 <= snakeFood_rect.x2 && snakehead_rect.x2 >= snakeFood_rect.x1 && 
-            //  snakehead_rect.y1 <= snakeFood_rect.y2 && snakehead_rect.y1 >= snakeFood_rect.y1) ||
-            // (snakehead_rect.x1 <= snakeFood_rect.x2 && snakehead_rect.x1 >= snakeFood_rect.x1 && 
-            //  snakehead_rect.y1 <= snakeFood_rect.y2 && snakehead_rect.y1 >= snakeFood_rect.y1) ||
-            // (snakehead_rect.x1 <= snakeFood_rect.x2 && snakehead_rect.x1 >= snakeFood_rect.x1 && 
-            //  snakehead_rect.y2 <= snakeFood_rect.y2 && snakehead_rect.y2 >= snakeFood_rect.y1)) ||
-            
-            // (snakeFood_rect.x2 == snakehead_rect.x2 || snakeFood_rect.y1 == snakehead_rect.y2 ||
-            //  snakeFood_rect.x2 == snakehead_rect.x1 || snakeFood_rect.y2 == snakehead_rect.y1)
-            
+    if (sf_distance <= _MAX_CENTERPOINT_DISTANCE) {
+        drawFood()
+        thiswillchange()
+    }
 }
 
 
@@ -160,9 +157,15 @@ epic.addEventListener('keydown', (event) => {
 });
 
 function thiswillchange () {
+    if(startgame == "start") {
         points += 1
         //console.log(points)
         scoreboard.innerHTML = `Score: ${points}`;
+    } else {
+        points = 0
+        scoreboard.innerHTML = `Score: ${points}`;
+    }
+    
 }
 
 function move(snakeHead, direction, distance=5) {
@@ -183,6 +186,7 @@ function move(snakeHead, direction, distance=5) {
     let elStyle = window.getComputedStyle(snakeHead);
     let value = elStyle.getPropertyValue(topOrLeft).replace("px", "");
     let destination = (Number(value) + distance) + "px";
+
     function moveAFrame() {
        if (elStyle.getPropertyValue(topOrLeft)==destination) {
          clearInterval(movingFrames);
@@ -192,7 +196,11 @@ function move(snakeHead, direction, distance=5) {
           value = elStyle.getPropertyValue(topOrLeft).replace("px", "");
          snakeHead.style[topOrLeft] = (Number(value) + frameDistance) + "px";
        }
+        // ******
+       getBounds(snakehead_rect, snakeHead);
+       getCenterPoint(snakehead_rect, 'snake');
     }
+
     let movingFrames = setInterval(moveAFrame, 10);
  }
 
@@ -201,9 +209,11 @@ function gameOverScreen () {
         gameover = true;
         directinal = "";
         startgame = "stop"
+        thiswillchange()
         snakeHead.style.top = "0px";
         snakeHead.style.left = "0px";
         alert('Game Over!');
+        points = 0
     }
 }
 
@@ -225,12 +235,21 @@ blueSnake.addEventListener('click', (event) => {
 
 function drawFood() {
     div.style.position = "absolute"
-    div.style.width = "30px";
-    div.style.height = "30px";
+    div.style.width = _MAX_FOOD_SIZE + "px";
+    div.style.height = _MAX_FOOD_SIZE + "px";
     div.style.background = "red";
     div.style.top = (95*Math.random()) + "%";
     div.style.left = (95*Math.random()) + "%";
     document.getElementById("snakefood").appendChild(div);
+
+    snakeFood = document.querySelector('#snakefood div');
+    getBounds(snakeFood_rect, snakeFood);
+    getCenterPoint(snakeFood_rect, 'food');
 }
 
-
+function getCenterPoint(el, name='')
+{
+    el.mx = el.x1 + ((el.x2 - el.x1) / 2);
+    el.my = el.y1 + ((el.y2 - el.y1) / 2);
+    // console.log(name, el);
+}
