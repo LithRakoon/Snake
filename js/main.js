@@ -51,7 +51,7 @@ let directinal = "";
 var div = document.createElement("div");
 let teest = document.querySelector("#teest");
 let snakeFood = document.querySelector('#snakefood div');   // Werkt niet, element food is nog niet gemaakt
-let startpoints = true
+
 
 
 
@@ -165,7 +165,7 @@ function thiswillchange () {
         points = 0
         scoreboard.innerHTML = `Score: ${points}`;
     }
-    
+
 }
 
 function move(snakeHead, direction, distance=5) {
@@ -212,8 +212,8 @@ function gameOverScreen () {
         thiswillchange()
         snakeHead.style.top = "0px";
         snakeHead.style.left = "0px";
-        alert('Game Over!');
         points = 0
+        alert('Game Over!');
     }
 }
 
