@@ -20,6 +20,10 @@ let redSnake = document.querySelector('#snakered');
 let greenSnake = document.querySelector('#snakegreen');
 let purpleSnake = document.querySelector('#snakepurple');
 let blueSnake = document.querySelector('#snakeblue');
+let redFood = document.querySelector('#foodred');
+let greenFood = document.querySelector('#foodgreen');
+let purpleFood = document.querySelector('#foodpurple');
+let blueFood = document.querySelector('#foodblue');
 let timeout;
 let startgame = "stop";
 let playfield_rect = {
@@ -45,16 +49,36 @@ let snakeFood_rect = {
     my: 0
 }
 
-
+let snakeSpeed = 5;
 let gameover = false;
 let directinal = "";
 var div = document.createElement("div");
 let teest = document.querySelector("#teest");
 let snakeFood = document.querySelector('#snakefood div');   // Werkt niet, element food is nog niet gemaakt
 
+function snakePeed1() {
+    if(startgame == "start") {
+        alert("Cant change speed while playing")
+        return
+    }
+    snakeSpeed = 5
+}
 
+function snakePeed2(){
+    if(startgame == "start") {
+        alert("Cant change speed while playing")
+        return
+    }
+    snakeSpeed = 7
+}
 
-
+function snakePeed3() {
+    if(startgame == "start") {
+        alert("Cant change speed while playing")
+        return
+    }
+    snakeSpeed = 9
+}
 
 window.onload = function() {
     getPlayfieldCoords();
@@ -125,9 +149,6 @@ function checkFood()
     }
 }
 
-
-
-
 let interValID = setInterval( () => {
     if (startgame === "start") {
         move(snakeHead, directinal)
@@ -168,7 +189,7 @@ function thiswillchange () {
 
 }
 
-function move(snakeHead, direction, distance=5) {
+function move(snakeHead, direction, distance=snakeSpeed) {
     if(!checkBounds())
         return;
     
@@ -231,6 +252,22 @@ purpleSnake.addEventListener('click', (event) => {
 
 blueSnake.addEventListener('click', (event) => {
     snakeHead.style.backgroundColor = 'blue';
+});
+
+redFood.addEventListener('click', (event) => {
+    snakeFood.style.backgroundColor = 'red';
+});
+
+greenFood.addEventListener('click', (event) => {
+    snakeFood.style.backgroundColor = 'green';
+});
+
+purpleFood.addEventListener('click', (event) => {
+    snakeFood.style.backgroundColor = 'purple';
+});
+
+blueFood.addEventListener('click', (event) => {
+    snakeFood.style.backgroundColor = 'blue';
 });
 
 function drawFood() {
