@@ -144,8 +144,8 @@ function checkFood()
     sf_distance = Math.sqrt(a + b);
 
     if (sf_distance <= _MAX_CENTERPOINT_DISTANCE) {
-        drawFood()
-        thiswillchange()
+        drawFood();
+        thiswillchange();
     }
 }
 
@@ -157,23 +157,48 @@ let interValID = setInterval( () => {
 
 }, 100)
 
-epic.addEventListener('keydown', (event) => {
-    if (event.key === "w") {
-        startgame = "start"
-        gameover = false
-        directinal = "up"
-    } if (event.key === "a") {
-        startgame = "start"
-        gameover = false
-        directinal = "left"
-    } if (event.key === "s") {
-        startgame = "start"
-        gameover = false
-        directinal = "top"
-    } if (event.key === "d") {
-        startgame = "start"
-        gameover = false
-        directinal = "right"
+document.addEventListener('keydown', function(e) {
+    switch (e.keyCode) {
+        case 37:
+            startgame = "start"
+            gameover = false
+            directinal = "left"
+            break;
+        case 38:
+            startgame = "start"
+            gameover = false
+            directinal = "up"
+            break;
+        case 39:
+            startgame = "start"
+            gameover = false
+            directinal = "right"
+            break;
+        case 40:
+            startgame = "start"
+            gameover = false
+            directinal = "top"
+            break;
+        case 65:
+            startgame = "start"
+            gameover = false
+            directinal = "left"
+            break;
+        case 87:
+            startgame = "start"
+            gameover = false
+            directinal = "up"
+            break;
+        case 68:
+            startgame = "start"
+            gameover = false
+            directinal = "right"
+            break;
+        case 83:
+            startgame = "start"
+            gameover = false
+            directinal = "top"
+            break;
     }
 });
 
@@ -222,7 +247,7 @@ function move(snakeHead, direction, distance=snakeSpeed) {
        getCenterPoint(snakehead_rect, 'snake');
     }
 
-    let movingFrames = setInterval(moveAFrame, 10);
+    let movingFrames = setInterval(moveAFrame, 0.005);
  }
 
 function gameOverScreen () {
@@ -235,6 +260,7 @@ function gameOverScreen () {
         snakeHead.style.left = "0px";
         points = 0
         alert('Game Over!');
+        return;
     }
 }
 
